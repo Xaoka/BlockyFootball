@@ -1,0 +1,6 @@
+Temp
+*.sln
+*.csproj
+*.meta
+Logs
+.vs
