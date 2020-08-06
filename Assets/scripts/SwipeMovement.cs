@@ -17,8 +17,6 @@ public class SwipeMovement : MonoBehaviour
 	private bool debugWithArrowKeys = true;
 	private bool isTransitioning = false;
 
-	Vector2 startPos;
-	float startTime;
 	Vector2 firstPressPos;
 	Vector2 secondPressPos;
 	Vector2 currentSwipe;
@@ -28,7 +26,7 @@ public class SwipeMovement : MonoBehaviour
 	{
 		swipedRight = false;
 		swipedLeft = false;
-#if UNITY_EDITOR
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			//save began touch 2d point
@@ -55,41 +53,6 @@ public class SwipeMovement : MonoBehaviour
 				swipedRight = true;
 			}
 		}
-#else
-		if (Input.touches.Length > 0)
-		{
-			Touch t = Input.GetTouch(0);
-			if (t.phase == TouchPhase.Began)
-			{
-				startPos = new Vector2(t.position.x / (float)Screen.width, t.position.y / (float)Screen.width);
-				startTime = Time.time;
-			}
-			if (t.phase == TouchPhase.Ended)
-			{
-				if (Time.time - startTime > MAX_SWIPE_TIME) // press too long
-					return;
-
-				Vector2 endPos = new Vector2(t.position.x / (float)Screen.width, t.position.y / (float)Screen.width);
-
-				Vector2 swipe = new Vector2(endPos.x - startPos.x, endPos.y - startPos.y);
-
-				if (swipe.magnitude < MIN_SWIPE_DISTANCE) // Too short swipe
-					return;
-
-				if (Mathf.Abs(swipe.x) > Mathf.Abs(swipe.y))
-				{ // Horizontal swipe
-					if (swipe.x > 0)
-					{
-						swipedRight = true;
-					}
-					else
-					{
-						swipedLeft = true;
-					}
-				}
-			}
-		}
-#endif
 
 		if (debugWithArrowKeys)
 		{
